@@ -1,0 +1,2 @@
+# External dependencies for Phase I advanced features
+python-dateutil>=2.8.0

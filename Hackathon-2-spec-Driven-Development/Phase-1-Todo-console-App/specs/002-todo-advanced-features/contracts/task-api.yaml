@@ -1,0 +1,169 @@
+# API Contracts: Todo App Advanced Features
+
+## Task Management API
+
+### Enhanced Task Model
+```yaml
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the task
+        title:
+          type: string
+          description: Task title
+        description:
+          type: string
+          description: Detailed task description
+        status:
+          type: string
+          enum: [pending, completed]
+          description: Current status of the task
+        priority:
+          type: string
+          enum: [high, medium, low]
+          description: Priority level of the task
+        tags:
+          type: array
+          items:
+            type: string
+          description: List of tags for categorization
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when task was created
+        due_date:
+          type: string
+          format: date-time
+          description: Optional due date/time for the task
+          nullable: true
+        recurrence:
+          type: string
+          enum: [daily, weekly, monthly, yearly, every_monday, every_tuesday, every_wednesday, every_thursday, every_friday, every_saturday, every_sunday]
+          description: Recurrence pattern if task repeats
+          nullable: true
+        recurrence_parent_id:
+          type: integer
+          description: ID of parent recurring template if this is an instance
+          nullable: true
+        is_recurring_template:
+          type: boolean
+          description: Flag indicating if this is a recurring template
+          default: false
+      required:
+        - id
+        - title
+        - status
+        - priority
+```
+
+### Enhanced Add Task Operation
+```yaml
+paths:
+  /tasks:
+    post:
+      summary: Add a new task with optional due date and recurrence
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                priority:
+                  type: string
+                  enum: [high, medium, low]
+                  default: medium
+                tags:
+                  type: array
+                  items:
+                    type: string
+                due_date:
+                  type: string
+                  format: date-time
+                  nullable: true
+                recurrence:
+                  type: string
+                  enum: [daily, weekly, monthly, yearly, every_monday, every_tuesday, every_wednesday, every_thursday, every_friday, every_saturday, every_sunday]
+                  nullable: true
+                is_recurring_template:
+                  type: boolean
+                  default: false
+              required:
+                - title
+```
+
+### Enhanced Update Task Operation
+```yaml
+paths:
+  /tasks/{id}:
+    put:
+      summary: Update an existing task with optional due date and recurrence
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                  enum: [pending, completed]
+                priority:
+                  type: string
+                  enum: [high, medium, low]
+                tags:
+                  type: array
+                  items:
+                    type: string
+                due_date:
+                  type: string
+                  format: date-time
+                  nullable: true
+                recurrence:
+                  type: string
+                  enum: [daily, weekly, monthly, yearly, every_monday, every_tuesday, every_wednesday, every_thursday, every_friday, every_saturday, every_sunday]
+                  nullable: true
+```
+
+### Get Tasks with Due Date Filtering
+```yaml
+paths:
+  /tasks:
+    get:
+      summary: Get tasks with optional due date filters
+      parameters:
+        - name: due_soon
+          in: query
+          description: Filter for tasks due soon (within 15 minutes)
+          schema:
+            type: boolean
+        - name: overdue
+          in: query
+          description: Filter for overdue tasks
+          schema:
+            type: boolean
+        - name: recurring
+          in: query
+          description: Filter for recurring tasks
+          schema:
+            type: boolean
+```
