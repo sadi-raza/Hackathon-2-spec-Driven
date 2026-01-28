@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@qwen-code/qwen-code": "^0.6.1",
+    "g": "^2.0.1"
+  }
+}
