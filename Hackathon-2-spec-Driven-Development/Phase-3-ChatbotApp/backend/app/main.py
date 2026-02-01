@@ -12,6 +12,8 @@ from .api.chat import router as chat_router
 from .api.conversations import router as conversations_router
 
 
+print("CORS Origins Loaded:", settings.cors_origins_list)
+
 # Create FastAPI app with lifespan context
 app = FastAPI(
     title="FastAPI Todo API Backend",
