@@ -9,7 +9,9 @@ import { getToken, clearAuth } from './auth';
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL ||
-  'https://developer-2526-fastapi-todo-app.hf.space/api';
+  (typeof window !== 'undefined'
+    ? `${window.location.protocol}//${window.location.host}/api`
+    : 'http://localhost:8000/api');
 
 export class ApiError extends Error {
   constructor(
