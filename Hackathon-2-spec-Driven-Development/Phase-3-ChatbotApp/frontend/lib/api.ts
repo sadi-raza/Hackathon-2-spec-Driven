@@ -7,7 +7,9 @@ import type {
 } from '@/types';
 import { getToken, clearAuth } from './auth';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ||
+  'https://developer-2526-fastapi-todo-app.hf.space/api';
 
 export class ApiError extends Error {
   constructor(

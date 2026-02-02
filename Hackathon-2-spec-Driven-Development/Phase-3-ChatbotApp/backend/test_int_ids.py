@@ -4,11 +4,12 @@ Test script to verify integer IDs work correctly.
 
 import asyncio
 import httpx
-
+import time
 
 async def test_integer_ids():
     """Test the API with integer IDs."""
     base_url = "http://localhost:8000/api"
+    time.sleep(10) # Wait for server to start
 
     async with httpx.AsyncClient() as client:
         print("\n=== Testing Integer IDs ===\n")
@@ -57,6 +58,7 @@ async def test_integer_ids():
             task_id = task_data.get("task", {}).get("id")
             print(f"   Task ID: {task_id} (type: {type(task_id).__name__})")
         else:
+            task_id = None
             print(f"   Failed: {task_response.text}")
 
         # 3. List tasks
