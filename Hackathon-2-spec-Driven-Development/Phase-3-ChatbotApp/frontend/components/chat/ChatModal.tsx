@@ -24,7 +24,7 @@ export function ChatModal({ isOpen, onClose, className }: ChatModalProps) {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [conversationId, setConversationId] = useState<number | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -58,7 +58,7 @@ export function ChatModal({ isOpen, onClose, className }: ChatModalProps) {
     }
   }, [isOpen, conversationId]);
 
-  const loadConversation = async (convId: string) => {
+  const loadConversation = async (convId: number) => {
     try {
       const data = await chatApi.getConversationMessages(convId);
       setMessages(data.messages);

@@ -26,8 +26,16 @@ def verify_token(token: str) -> dict:
         )
         return payload
     except ExpiredSignatureError:
+        import logging
+        logging.error(f"Token expired: {token[:20]}..." if len(token) > 20 else token)
         raise HTTPException(status_code=401, detail="Token expired")
-    except InvalidTokenError:
+    except InvalidTokenError as e:
+        import logging
+        logging.error(f"Invalid token: {str(e)}")
+        raise HTTPException(status_code=401, detail="Invalid token")
+    except Exception as e:
+        import logging
+        logging.error(f"Unexpected error during token verification: {str(e)}")
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
@@ -41,17 +49,29 @@ async def get_current_user(
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Missing authorization")
 
-    token = authorization.split(" ")[1]
+    token_parts = authorization.split(" ")
+    if len(token_parts) != 2:
+        import logging
+        logging.error("Malformed authorization header")
+        raise HTTPException(status_code=401, detail="Malformed authorization header")
+
+    token = token_parts[1]
     payload = verify_token(token)
 
     user_id_str = payload.get("sub") or payload.get("userId")
     if not user_id_str:
-        raise HTTPException(status_code=401, detail="Invalid token payload")
+        import logging
+        logging.error("Missing user ID in token payload")
+        raise HTTPException(status_code=401, detail="Invalid token payload - missing user ID")
 
     # Convert to int (user IDs are now integers)
     try:
         user_id = int(user_id_str)
+        import logging
+        logging.info(f"Successfully extracted user ID: {user_id} from token")
     except (ValueError, TypeError):
+        import logging
+        logging.error(f"Failed to convert user ID to integer: {user_id_str}")
         raise HTTPException(status_code=401, detail="Invalid user ID in token")
 
     # Fetch user from database
@@ -60,6 +80,8 @@ async def get_current_user(
     user = result.scalar_one_or_none()
 
     if not user:
+        import logging
+        logging.error(f"User not found in database: {user_id}")
         raise HTTPException(status_code=401, detail="User not found")
 
     return user

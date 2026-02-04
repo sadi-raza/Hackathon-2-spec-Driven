@@ -41,7 +41,7 @@ class ChatApiClient {
     };
 
     // Replace {user_id} placeholder in endpoint
-    const resolvedEndpoint = endpoint.replace('{user_id}', user.id);
+    const resolvedEndpoint = endpoint.replace('{user_id}', user.id.toString());
 
     const response = await fetch(`${API_BASE}${resolvedEndpoint}`, {
       ...options,
@@ -90,11 +90,13 @@ class ChatApiClient {
   /**
    * Get messages for a specific conversation.
    */
-  async getConversationMessages(conversationId: string): Promise<{
-    conversation: { id: string; title: string | null };
+  async getConversationMessages(conversationId: number): Promise<{
+    conversation: { id: number; title: string | null };
     messages: ChatMessage[];
   }> {
-    return this.request(`/{user_id}/conversations/${conversationId}`);
+    return this.request(`/{user_id}/conversations/${conversationId}`, {
+      method: 'GET'
+    });
   }
 }
 

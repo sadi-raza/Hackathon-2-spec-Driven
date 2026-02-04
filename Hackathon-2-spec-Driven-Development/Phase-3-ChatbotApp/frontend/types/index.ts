@@ -1,7 +1,7 @@
 // Core Entities
 
 export interface User {
-  id: string;
+  id: number;
   email: string;
   createdAt: string; // ISO 8601 date string
 }
@@ -13,13 +13,13 @@ export interface AuthState {
 }
 
 export interface Task {
-  id: string;
+  id: number;
   title: string;
   description: string | null;
   completed: boolean;
   createdAt: string; // ISO 8601 date string
   updatedAt: string; // ISO 8601 date string
-  userId: string;
+  userId: number;
 }
 
 // For optimistic updates (before server assigns ID)
@@ -153,17 +153,17 @@ export interface ToolCallResult {
 
 export interface ChatRequest {
   message: string;
-  conversationId?: string;
+  conversationId?: number;
 }
 
 export interface ChatResponse {
-  conversationId: string;
+  conversationId: number;
   response: string;
   toolCalls: ToolCallResult[];
 }
 
 export interface Conversation {
-  id: string;
+  id: number;
   title: string | null;
   createdAt: string;
   updatedAt: string;

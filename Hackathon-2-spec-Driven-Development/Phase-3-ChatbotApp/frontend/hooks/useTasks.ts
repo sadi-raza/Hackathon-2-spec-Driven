@@ -11,7 +11,7 @@ export const taskKeys = {
   lists: () => [...taskKeys.all, 'list'] as const,
   list: () => [...taskKeys.lists()] as const,
   details: () => [...taskKeys.all, 'detail'] as const,
-  detail: (id: string) => [...taskKeys.details(), id] as const,
+  detail: (id: number) => [...taskKeys.details(), id.toString()] as const,
 };
 
 // Fetch all tasks for the authenticated user
@@ -42,13 +42,13 @@ export function useCreateTask() {
       // Optimistically add new task
       if (previousTasks) {
         const optimisticTask: Task = {
-          id: `temp-${Date.now()}`,
+          id: Number(`-${Date.now()}`), // Negative number as temp ID
           title: newTask.title,
           description: newTask.description ?? null,
           completed: false,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          userId: 'temp',
+          userId: 0, // Placeholder user ID
         };
 
         queryClient.setQueryData<TaskListResponse>(taskKeys.list(), {
@@ -86,7 +86,7 @@ export function useUpdateTask() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateTaskPayload }) =>
+    mutationFn: ({ id, data }: { id: number; data: UpdateTaskPayload }) =>
       api.tasks.update(id, data),
     onMutate: async ({ id, data }) => {
       await queryClient.cancelQueries({ queryKey: taskKeys.list() });
@@ -133,7 +133,7 @@ export function useToggleTask() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, completed }: { id: string; completed: boolean }) =>
+    mutationFn: ({ id, completed }: { id: number; completed: boolean }) =>
       api.tasks.update(id, { completed }),
     onMutate: async ({ id, completed }) => {
       await queryClient.cancelQueries({ queryKey: taskKeys.list() });
@@ -178,7 +178,7 @@ export function useDeleteTask() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => api.tasks.delete(id),
+    mutationFn: (id: number) => api.tasks.delete(id),
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: taskKeys.list() });
 

@@ -43,11 +43,16 @@ async def chat(
         HTTPException 403: If user_id doesn't match authenticated user
         HTTPException 500: If chat processing fails
     """
+    # Enhanced logging for debugging authentication issues
+    import logging
+    logging.info(f"Chat endpoint called - path user_id: {user_id}, authenticated user_id: {current_user.id}")
+
     # Enforce user isolation - path user_id must match authenticated user
     if user_id != current_user.id:
+        logging.warning(f"User ID mismatch - path: {user_id}, authenticated: {current_user.id}")
         raise HTTPException(
             status_code=403,
-            detail="You can only access your own chat"
+            detail=f"Access denied. Path user_id ({user_id}) doesn't match authenticated user_id ({current_user.id})"
         )
 
     # Validate message
@@ -83,7 +88,6 @@ async def chat(
 
     except Exception as e:
         # Log the error for debugging (in production, use proper logging)
-        import logging
         logging.error(f"Chat processing error: {e}")
 
         raise HTTPException(

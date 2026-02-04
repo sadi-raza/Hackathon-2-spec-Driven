@@ -83,13 +83,13 @@ class ApiClient {
         body: JSON.stringify(data),
       }),
 
-    update: (id: string, data: UpdateTaskPayload) =>
+    update: (id: number, data: UpdateTaskPayload) =>
       this.request<TaskResponse>(`/tasks/${id}`, {
         method: 'PUT',
         body: JSON.stringify(data),
       }),
 
-    delete: (id: string) =>
+    delete: (id: number) =>
       this.request<{ message: string }>(`/tasks/${id}`, {
         method: 'DELETE',
       }),
