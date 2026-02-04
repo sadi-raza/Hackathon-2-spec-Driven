@@ -47,7 +47,7 @@ export default function DashboardPage() {
   const handleToggleTask = async (id: string, completed: boolean) => {
     setTogglingId(id);
     try {
-      await toggleTask.mutateAsync({ id, completed });
+      await toggleTask.mutateAsync({ id: Number(id), completed });
     } finally {
       setTogglingId(undefined);
     }
