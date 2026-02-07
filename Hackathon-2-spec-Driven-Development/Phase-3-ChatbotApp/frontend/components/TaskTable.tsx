@@ -8,10 +8,10 @@ import type { Task } from '@/types';
 
 interface TaskTableProps {
   tasks: Task[];
-  onToggle: (id: string, completed: boolean) => void;
+  onToggle: (id: number, completed: boolean) => void;
   onEdit: (task: Task) => void;
   onDelete: (task: Task) => void;
-  togglingId?: string;
+  togglingId?: number;
 }
 
 export function TaskTable({

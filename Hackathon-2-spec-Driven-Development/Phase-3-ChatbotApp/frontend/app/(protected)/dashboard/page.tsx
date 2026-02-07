@@ -30,7 +30,7 @@ export default function DashboardPage() {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   // Currently toggling task ID for loading state
-  const [togglingId, setTogglingId] = useState<string | undefined>();
+  const [togglingId, setTogglingId] = useState<number | undefined>();
 
   const tasks = data?.tasks ?? [];
 
@@ -44,7 +44,7 @@ export default function DashboardPage() {
     setIsModalOpen(true);
   };
 
-  const handleToggleTask = async (id: string, completed: boolean) => {
+  const handleToggleTask = async (id: number, completed: boolean) => {
     setTogglingId(id);
     try {
       await toggleTask.mutateAsync({ id: Number(id), completed });

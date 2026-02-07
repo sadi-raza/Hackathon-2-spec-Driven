@@ -102,7 +102,7 @@ export interface ThemeState {
 // Query Keys
 export const queryKeys = {
   tasks: ['tasks'] as const,
-  task: (id: string) => ['tasks', id] as const,
+  task: (id: number) => ['tasks', id.toString()] as const,
   user: ['user'] as const,
 } as const;
 
